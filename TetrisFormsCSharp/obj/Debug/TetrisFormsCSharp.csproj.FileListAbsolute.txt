@@ -1,0 +1,10 @@
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\bin\Debug\TetrisFormsCSharp.exe.config
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\bin\Debug\TetrisFormsCSharp.exe
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\bin\Debug\TetrisFormsCSharp.pdb
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\obj\Debug\TetrisFormsCSharp.csprojResolveAssemblyReference.cache
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\obj\Debug\TetrisFormsCSharp.Form1.resources
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\obj\Debug\TetrisFormsCSharp.Properties.Resources.resources
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\obj\Debug\TetrisFormsCSharp.csproj.GenerateResource.Cache
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\obj\Debug\TetrisFormsCSharp.csproj.CoreCompileInputs.cache
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\obj\Debug\TetrisFormsCSharp.exe
+C:\Users\Rodrigo\source\repos\TetrisFormsCSharp\TetrisFormsCSharp\obj\Debug\TetrisFormsCSharp.pdb
