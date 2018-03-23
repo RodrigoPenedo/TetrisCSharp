@@ -56,7 +56,6 @@ namespace TetrisFormsCSharp
                     Rotate();
                 }
 
-
                 DisplayBoard();
                 DisplayPiece();
 
@@ -142,6 +141,7 @@ namespace TetrisFormsCSharp
 
         //Buttons Array
         private Button[,] Buttons = new Button[10, 24];
+        private Button[,] NextPieceButton = new Button[4,4];
 
         //Grid Array
         private int[,] Grid = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -168,6 +168,8 @@ namespace TetrisFormsCSharp
                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+        private int Score = 0;
 
         Tetromino I_piece = new Tetromino()
         {
@@ -226,13 +228,15 @@ namespace TetrisFormsCSharp
         };
 
         Tetromino Temp_piece;
+        Tetromino Next_piece;
 
         private void Start()
         {
             SetUpButtons();
+            SetUpNextPieceButtons();
             DisplayBoard();
 
-            SpawnPiece();
+            SpawnFirstPiece();
             DisplayPiece();
         }
 
@@ -241,6 +245,7 @@ namespace TetrisFormsCSharp
             if (Temp_piece.Name == null)
             {
                 SpawnPiece();
+                DisplayNextPiece();
             }
             else
             {
@@ -524,27 +529,82 @@ namespace TetrisFormsCSharp
             }
         }
 
-        //Picks a random number and Spanws a random Piece
-        private void SpawnPiece()
+        private void SetUpNextPieceButtons()
+        {
+            NextPieceButton[0, 0] = NextBtn00;
+            NextPieceButton[0, 1] = NextBtn01;
+            NextPieceButton[0, 2] = NextBtn02;
+            NextPieceButton[0, 3] = NextBtn03;
+
+            NextPieceButton[1, 0] = NextBtn10;
+            NextPieceButton[1, 1] = NextBtn11;
+            NextPieceButton[1, 2] = NextBtn12;
+            NextPieceButton[1, 3] = NextBtn13;
+
+            NextPieceButton[2, 0] = NextBtn20;
+            NextPieceButton[2, 1] = NextBtn21;
+            NextPieceButton[2, 2] = NextBtn22;
+            NextPieceButton[2, 3] = NextBtn23;
+
+            NextPieceButton[3, 0] = NextBtn30;
+            NextPieceButton[3, 1] = NextBtn31;
+            NextPieceButton[3, 2] = NextBtn32;
+            NextPieceButton[3, 3] = NextBtn33;
+        }
+
+        private void SpawnFirstPiece()
         {
             Random n = new Random();
             int number = n.Next(1, 8);
 
             switch (number)
             {
-                case 1: { Temp_piece = I_piece; break; }
-                case 2: { Temp_piece = O_piece; break; }
-                case 3: { Temp_piece = T_piece; break; }
-                case 4: { Temp_piece = S_piece; break; }
-                case 5: { Temp_piece = Z_piece; break; }
-                case 6: { Temp_piece = J_piece; break; }
-                case 7: { Temp_piece = L_piece; break; }
+                case 1: { Next_piece = I_piece; break; }
+                case 2: { Next_piece = O_piece; break; }
+                case 3: { Next_piece = T_piece; break; }
+                case 4: { Next_piece = S_piece; break; }
+                case 5: { Next_piece = Z_piece; break; }
+                case 6: { Next_piece = J_piece; break; }
+                case 7: { Next_piece = L_piece; break; }
             }
 
             //set initial spawn position
-            Temp_piece.Position = new int[2] { 0, 4 };
-            Temp_piece.PotentialPosition = new int[2] { 0, 4 };
-            Temp_piece.move = true;
+            Next_piece.Position = new int[2] { 0, 4 };
+            Next_piece.PotentialPosition = new int[2] { 0, 4 };
+            Next_piece.move = true;
+
+            DisplayNextPiece();
+            SpawnPiece();
+        }
+
+        //Picks a random number and Spanws a random Piece
+        private void SpawnPiece()
+        {
+            Temp_piece = Next_piece;
+            Random n = new Random();
+
+            while (Temp_piece.Name == Next_piece.Name)
+            {
+                int number = n.Next(1, 8);
+
+                switch (number)
+                {
+                    case 1: { Next_piece = I_piece; break; }
+                    case 2: { Next_piece = O_piece; break; }
+                    case 3: { Next_piece = T_piece; break; }
+                    case 4: { Next_piece = S_piece; break; }
+                    case 5: { Next_piece = Z_piece; break; }
+                    case 6: { Next_piece = J_piece; break; }
+                    case 7: { Next_piece = L_piece; break; }
+                }
+
+                //set initial spawn position
+                Temp_piece.Position = new int[2] { 0, 4 };
+                Temp_piece.PotentialPosition = new int[2] { 0, 4 };
+                Temp_piece.move = true;
+            }
+
+            DisplayNextPiece();
         }
 
         private void LandPiece()
@@ -578,6 +638,44 @@ namespace TetrisFormsCSharp
                 Shape = new int[2, 2] {{0,0},
                                        {0,0}}
             };
+
+            CheckLine();
+        }
+
+        private void CheckLine()
+        {
+            Boolean Line = true;
+            int Number = 0;
+            for (int j = 23; j >= 0; j--)
+            {
+                Line = true;
+                Number = 0;
+
+                for (int i = 0; i < 10; i++)
+                    if (Grid[j, i] == 0)
+                    {
+                        Line = false;
+                    }
+
+                if (Line)
+                {
+                    Number = j;
+                    Score += 500;
+                    lblScoreResult.Text = Score.ToString();
+
+                    for (int x = Number - 1; x >= 0; x--)
+                    {
+                        for (int y = 9; y >= 0; y--)
+                        {
+                            Grid[x + 1, y] = Grid[x, y];
+                        }
+                    }
+
+                    DisplayBoard();
+                    System.Threading.Thread.Sleep(200);
+                    CheckLine();
+                }
+            }
         }
 
         private void DisplayPiece()
@@ -614,6 +712,54 @@ namespace TetrisFormsCSharp
 
                     //depending on each specific block change the button colour
                     SetButtonColour(block, x, y);
+                }
+            }
+        }
+
+        private void DisplayNextPiece()
+        {
+            int[,] Shape = Next_piece.Shape;
+            int[] Position = Next_piece.Position;
+            int number, X, Y, AdditionalX, AdditionalY;
+
+            if (Next_piece.Shape.GetLength(0) == 2 || Next_piece.Shape.GetLength(0) == 3)
+            {
+                AdditionalX = 1;
+                AdditionalY = 1;
+            }
+            else
+            {
+                AdditionalX = 0;
+                AdditionalY = 0;
+            }
+
+            foreach (Button button in NextPieceButton)
+            {
+                button.BackColor = Color.Transparent;
+            }
+
+            for (int x = 0; x < Next_piece.Shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < Next_piece.Shape.GetLength(1); y++)
+                {
+                    if (Shape[x, y] != 0)
+                    {
+                        number = Shape[x, y];
+                        X = x + AdditionalX;
+                        Y = y + AdditionalY;
+
+                        switch (number)
+                        {
+                            case 0: { NextPieceButton[X, Y].BackColor = Color.Transparent; break; }
+                            case 1: { NextPieceButton[X, Y].BackColor = Color.Aqua; break; }
+                            case 2: { NextPieceButton[X, Y].BackColor = Color.Gold; break; }
+                            case 3: { NextPieceButton[X, Y].BackColor = Color.MediumOrchid; break; }
+                            case 4: { NextPieceButton[X, Y].BackColor = Color.LimeGreen; break; }
+                            case 5: { NextPieceButton[X, Y].BackColor = Color.Crimson; break; }
+                            case 6: { NextPieceButton[X, Y].BackColor = Color.MidnightBlue; break; }
+                            case 7: { NextPieceButton[X, Y].BackColor = Color.DarkOrange; break; }
+                        }
+                    }
                 }
             }
         }
